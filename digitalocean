@@ -41,7 +41,7 @@ sudo nano /etc/systemd/system/video_downloader_multi_bot.socket
 Description=gunicorn socket
 
 [Socket]
-ListenStream=/run/ads.sock
+ListenStream=/run/video_downloader_multi_bot.sock
 
 [Install]
 WantedBy=sockets.target
@@ -52,7 +52,7 @@ sudo nano /etc/systemd/system/video_downloader_multi_bot.service
 
 [Unit]
 Description=gunicorn daemon
-Requires=ads.socket
+Requires=video_downloader_multi_bot.socket
 After=network.target
 
 [Service]
@@ -63,7 +63,7 @@ ExecStart=/var/projects/video_downloader_multi_bot/env/bin/gunicorn \
           --access-logfile - \
           --workers 4 \
           --bind unix:/run/video_downloader_multi_bot.sock \
-          Telegram_Multi_Instagram_Downloader_bots.wsgi:application
+          core.wsgi:application
 
 [Install]
 WantedBy=multi-user.target
@@ -75,13 +75,13 @@ sudo systemctl enable video_downloader_multi_bot.socket
 sudo systemctl status video_downloader_multi_bot.socket
 file /run/video_downloader_multi_bot.sock
 sudo journalctl -u ads.socket
-sudo systemctl status ads
+sudo systemctl status video_downloader_multi_bot
 curl --unix-socket /run/video_downloader_multi_bot.sock localhost
-sudo systemctl status ads
-sudo journalctl -u ads
-
+sudo systemctl status video_downloader_multi_bot
+sudo journalctl -u video_downloader_multi_bot
+sudo systemctl status video_downloader_multi_bot
 sudo systemctl daemon-reload
-sudo systemctl restart ads
+sudo systemctl restart video_downloader_multi_bot
 
 sudo nano /etc/nginx/sites-available/downloader.sherzamon.cloud
 

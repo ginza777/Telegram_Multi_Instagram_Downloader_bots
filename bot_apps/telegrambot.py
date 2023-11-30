@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 def help(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text("Siz barcha kanallarga obuna bo'ldingiz! ✅")
+    update.message.reply_text("Sizga qanday yordam bera olishim mumkin?")
 
 
 def start(update: Update, context: CallbackContext) -> None:
