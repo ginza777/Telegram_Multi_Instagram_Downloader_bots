@@ -3,7 +3,7 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, Bot
 from telegram.error import BadRequest
 from telegram import Update
 from telegram.ext import CallbackContext
-from central.models import Subscriber, Bot_token, Channel
+from central.models import Subscriber, Bot_token, Channel, User_subscribe_channel
 
 logger = logging.getLogger(__name__)
 
@@ -17,6 +17,8 @@ def start(update: Update, context: CallbackContext) -> None:
     bot = Bot_token.objects.get(bot_username=f"@{context.bot.username}")
     # agar user bazada mavjud bo'lsa yangilash kerak aks holda qo'shish kerak
     user_id = update.effective_user.id
+
+    message=bot.start_message
 
     if Subscriber.objects.filter(user_id=user_id).exists():
         Subscriber.objects.filter(user_id=user_id).update(first_name=update.effective_user.first_name,
@@ -53,6 +55,16 @@ def start(update: Update, context: CallbackContext) -> None:
 
     keyboard = [[button] for button in buttons]
     reply_markup = InlineKeyboardMarkup(keyboard)
+    if message is None:
+        message=f"""🏻 Salom\nInstagram'dan video, audio va rasm yuklab olish uchun eng tezkor {bot.bot_username}'ga xush kelibsiz.\nBot Instagram'dan quydigalarni yuklab olishi mumkin:
+         • Reels
+         • Stories
+         • IGTV
+         • Foydalanuvchi rasm va videolari
+         🔈 Videolarni audio shaklida ham yuklab olishingiz mumkin
+          🔗 Boshlash uchun kanallarga obuna bo'ling va 'Tekshirish' tugmasini bosing."""
+
+    update.message.reply_text(message)
     update.message.reply_text("Iltimos, biror bir kanalga obuna bo'lgandan so'ng 'Tekshirish' tugmasini bosing.",
                               reply_markup=reply_markup)
 
@@ -77,6 +89,13 @@ def check_channels(update: Update, context: CallbackContext) -> None:
             chat_member = bot_cheker.get_chat_member(channel['username'], user_id)
             if chat_member and chat_member.status == "member" or chat_member.status == "creator" or chat_member.status == "administrator":
                 channel['subscribed'] = True
+                ########
+                user=Subscriber.objects.get(user_id=user_id)
+                channel=Channel.objects.get(channel_username=channel['username'])
+                if User_subscribe_channel.objects.filter(user=user, channel=channel).exists():
+                    User_subscribe_channel.objects.filter(user=user, channel=channel, subscribe=False).update(subscribe=True)
+                else:
+                    User_subscribe_channel.objects.create(user=user, channel=channel, subscribe=True).save()
             else:
                 channel['subscribed'] = False
         except BadRequest as e:

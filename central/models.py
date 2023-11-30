@@ -1,5 +1,6 @@
 from django.db import models
 
+
 # Create your models here.
 
 
@@ -11,7 +12,7 @@ class Subscriber(models.Model):
     language_code = models.CharField(max_length=10, blank=True, null=True)
     is_bot = models.BooleanField(default=False)
     date_created = models.DateTimeField(auto_now_add=True)
-    bot=models.ForeignKey("Bot_token", on_delete=models.CASCADE, blank=True, null=True)
+    bot = models.ForeignKey("Bot_token", on_delete=models.CASCADE, blank=True, null=True)
 
     def __str__(self):
         return self.user_id
@@ -21,10 +22,12 @@ class Subscriber(models.Model):
         verbose_name_plural = "Subscribers"
         ordering = ["-date_created"]
 
+
 class Bot_token(models.Model):
     token = models.CharField(max_length=100, unique=True)
     bot_username = models.CharField(max_length=100, unique=True)
     date_created = models.DateTimeField(auto_now_add=True)
+    start_message = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.token
@@ -35,7 +38,7 @@ class Bot_token(models.Model):
 
 class Channel(models.Model):
     channel_username = models.CharField(max_length=100, unique=True)
-    channel_name=models.CharField(max_length=100, unique=True)
+    channel_name = models.CharField(max_length=100, unique=True)
     date_created = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -50,13 +53,25 @@ class Channel(models.Model):
         if not self.channel_username.startswith("@"):
             self.channel_username = "@" + self.channel_username
         if self.channel_name is None:
-            self.channel_name=self.channel_username.split("@")[1]
+            self.channel_name = self.channel_username.split("@")[1]
 
         super().save(*args, **kwargs)
 
 
+class User_subscribe_channel(models.Model):
+    user = models.ForeignKey("Subscriber", on_delete=models.CASCADE, blank=True, null=True)
+    channel = models.ForeignKey("Channel", on_delete=models.CASCADE, blank=True, null=True)
+    subscribe = models.BooleanField(default=False)
+    date_created = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'user_subscribe_channel'
+        unique_together = ('user', 'channel')
+
+    def __str__(self):
+        return self.user.user_id
+
+
 class Channel_bot_settings(models.Model):
-    bot=models.OneToOneField("Bot_token", on_delete=models.CASCADE, blank=True, null=True)
-    channel=models.ManyToManyField("Channel", blank=True, null=True)
-
-
+    bot = models.ForeignKey("Bot_token", on_delete=models.CASCADE, blank=True, null=True)
+    channel = models.ManyToManyField("Channel", blank=True, null=True)
