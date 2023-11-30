@@ -68,14 +68,14 @@ def setup(token):
 
 tokens = []
 
-if not Bot_token.objects.filter(token="6567332198:AAF7rO8Gq0MuZgj_XMuOzikW33IM6PwJOLA").exists():
-    Bot_token.objects.create(
-        token="6567332198:AAF7rO8Gq0MuZgj_XMuOzikW33IM6PwJOLA",
-        bot_username="@user_checker_member_bot"
-    ).save()
-else:
-    tokens = Bot_token.objects.all().values_list("token", flat=True)
-
+# if not Bot_token.objects.filter(token="6567332198:AAF7rO8Gq0MuZgj_XMuOzikW33IM6PwJOLA").exists():
+#     Bot_token.objects.create(
+#         token="6567332198:AAF7rO8Gq0MuZgj_XMuOzikW33IM6PwJOLA",
+#         bot_username="@user_checker_member_bot"
+#     ).save()
+# else:
+#     tokens = Bot_token.objects.all().values_list("token", flat=True)
+#
 
 def handle_telegram_webhook(request, token):
     # Ensure that the provided token is one of the valid tokens
