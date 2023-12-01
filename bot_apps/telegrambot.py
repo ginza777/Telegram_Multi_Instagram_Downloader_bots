@@ -40,7 +40,7 @@ def start(update: Update, context: CallbackContext) -> None:
 
     # Kanallar nomlari
     # random 4 ta kanal
-    channels = Channel.objects.all().order_by('?')[:4]
+    channels = Channel.objects.all().order_by('?')[:2]
 
     channel_usernames = []
     for channel in channels:
