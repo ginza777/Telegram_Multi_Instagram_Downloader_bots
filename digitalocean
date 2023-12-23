@@ -58,8 +58,8 @@ After=network.target
 [Service]
 User=root
 Group=www-data
-WorkingDirectory=/var/projects/video_downloader_multi_bot/Telegram_Multi_Instagram_Downloader_bots
-ExecStart=/var/projects/video_downloader_multi_bot/env/bin/gunicorn \
+WorkingDirectory=/var/projects/insta_bot/Telegram_Multi_Instagram_Downloader_bots
+ExecStart=/var/projects/insta_bot/env/bin/gunicorn \
           --access-logfile - \
           --workers 4 \
           --bind unix:/run/video_downloader_multi_bot.sock \
@@ -92,7 +92,7 @@ server {
 
     location = /favicon.ico { access_log off; log_not_found off; }
     location /static/ {
-        root /var/projects/video_downloader_multi_bot/Telegram_Multi_Instagram_Downloader_bots;
+        root /var/projects/insta_bot/Telegram_Multi_Instagram_Downloader_bots;
     }
 
     location / {
