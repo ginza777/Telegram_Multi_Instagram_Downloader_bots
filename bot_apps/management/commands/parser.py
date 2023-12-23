@@ -2,9 +2,6 @@ import asyncio
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
-from client.models import Filename
-from setting_ads.models import Channels
-from setting_ads.models import Client_Settings
 import requests
 
 
