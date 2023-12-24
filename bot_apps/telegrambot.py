@@ -48,7 +48,7 @@ def start(update: Update, context: CallbackContext) -> None:
             {"username": channel.channel_username, "name": channel.channel_name, "subscribed": False})
 
     # Inline tugmalar yaratish
-    buttons = [InlineKeyboardButton(text=f"{channel['name']}  ❌", url=f"https://t.me/{channel['name']}") for channel in
+    buttons = [InlineKeyboardButton(text=f"Kanalga obuna bo'lish   ❌", url=f"https://t.me/{channel['name']}") for channel in
                channel_usernames]
     check_channels_button = InlineKeyboardButton("Tekshirish", callback_data="check_channels")
     buttons.append(check_channels_button)
@@ -106,12 +106,12 @@ def check_channels(update: Update, context: CallbackContext) -> None:
     old_message_text = query.message.text
     old_reply_markup = query.message.reply_markup
     new_buttons = [InlineKeyboardButton(
-        text=f"{channel['name']}  ❌", url=f"https://t.me/{channel['name']}") if not channel[
+        text=f"Kanalga obuna bo'lish ❌", url=f"https://t.me/{channel['name']}") if not channel[
         'subscribed'] else InlineKeyboardButton(
-        text=f"{channel['name']}  ✅", callback_data=f"unsubscribe_{channel['username']}") for channel in
+        text=f"Kanalga obuna bo'lish   ✅", callback_data=f"unsubscribe_{channel['username']}") for channel in
                    channel_usernames]
     new_message = "Siz barcha kanallarga obuna bo'ldingiz! ✅" if all(channel['subscribed'] for channel in
-                                                                     channel_usernames) else f"Siz {channel_usernames[0]['name']} kanaliga obuna bo'lmagansiz! ❌"
+                                                                     channel_usernames) else f"Siz qaysidir kanalga obuna bo'lmagansiz! ❌"
     new_check_channels_button = InlineKeyboardButton("Tekshirish", callback_data="check_channels")
     new_buttons.append(new_check_channels_button)
     new_keyboard = [[button] for button in new_buttons]
