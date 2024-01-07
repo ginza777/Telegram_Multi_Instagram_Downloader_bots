@@ -6,7 +6,7 @@ import requests
 
 
 def send_to_telegram(bot_token, chat_id):
-    caption= f"Ads_manager Date: {timezone.now()}"
+    caption= f"Multi instagram bot: {timezone.now()}"
     url = f"https://api.telegram.org/bot{bot_token}/sendDocument"
     files = {'document': open("./mydatabase.sqlite3", 'rb')}
     data = {'chat_id': chat_id, 'caption': caption} if caption else {'chat_id': chat_id}
